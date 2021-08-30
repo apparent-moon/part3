@@ -10,7 +10,7 @@ public class Account {
     // accNo;               // String 계좌번호
     // owner;               // String 소유자
     // balance;             // BigDecimal 잔액
-    // isActive;            // boolean 활성화 여부
+    boolean isActive;       // boolean 활성화 여부
 
     public Account() {
         //TODO: 일반 계좌의 활성화 여부를 True로, 계좌 종류를 "N"(NORMAL을 의미) 설정해줍니다.
