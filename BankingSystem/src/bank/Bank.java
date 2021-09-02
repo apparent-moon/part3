@@ -49,16 +49,19 @@ public class Bank {
 
     }
 
-    public Account createAccount() throws InputMismatchException {
-        //TODO: 계좌 생성하는 메서드 구현
+    //계좌를 생성하는 createAccount() 메소드
+    public Account createAccount() throws InputMismatchException{
         try {
-            // 계좌번호 채번
-            // 계좌번호는 "0000"+증가한 seq 포맷을 가진 번호입니다.
-            //TODO
-            System.out.printf("\n%s님 계좌가 발급되었습니다.\n", owner);
-            return account;
-        }catch (){
-            //TODO: 오류 throw
+            System.out.println("생성할 계좌의 소유주명을 입력해주세요: ");
+            String owner = scanner.next();
+            String ano = String.format(new DecimalFormat("0000").format(++seq));
+            System.out.printf("\n%s님의 계좌가 발급되었습니다.\n", owner);
+            //Account 생성자를 호출해서 account라는 객체를 생성했다. 계좌의 초기금액은 0원이므로 0으로 선언했다.
+            Account account = new Account(ano, owner, new BigDecimal("0"));
+            return account ;
+        }catch (Exception e){
+            System.out.println("계좌를 생성하는 과정에서 오류가 발생하였습니다.");
+            return null;
         }
     }
 
