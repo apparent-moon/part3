@@ -39,14 +39,22 @@ public class Bank {
         }
     }
 
+    //입금 메소드 deposit.
     public void deposit(){
-        //TODO: 입금 메서드 구현
-        // 존재하지 않는 계좌이면 다시 물어보기
-        System.out.println("\n입금하시려는 계좌번호를 입력해주세요.");
-
-        // TODO: 입금 처리
-        System.out.println("\n입금할 금액을 입력하세요.");
-
+        System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
+        String accountNum = scanner.next();
+        if(findAccount(accountNum) != null) {
+            Account account = findAccount(accountNum);
+            System.out.print("입금하실 금액을 입력해주세요 : ");
+            BigDecimal input = scanner.nextBigDecimal();
+            System.out.println("입금이 완료되었습니다.");
+            account.setBalance(input);
+            System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(), account.getAccNo(), account.getOwner(), account.getBalance());
+        }else {
+            System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+            //재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
+            deposit();
+        }
     }
 
     //계좌를 생성하는 createAccount() 메소드
