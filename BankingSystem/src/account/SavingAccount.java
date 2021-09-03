@@ -33,6 +33,6 @@ public class SavingAccount extends Account{
 
     //적금계좌에서는 목표금액도 보여준다.
     public void getAccountInfo(Account account) {
-        System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 | 목표금액 : %s원", account.getCategory(), account.getAccNo(), account.getOwner(), account.getBalance(), this.getGoalAmount());
+        System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 | 목표금액 : %s원\n", account.getCategory(), account.getAccNo(), account.getOwner(), account.getBalance(), this.getGoalAmount());
     }
 }

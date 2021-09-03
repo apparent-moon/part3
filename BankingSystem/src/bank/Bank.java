@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Bank {
     //TODO: Bank 클래스는 출금, 입금, 송금, 계좌 생성, 계좌 검색 기능들을 갖고 있습니다.
@@ -65,10 +65,20 @@ public class Bank {
         }
     }
 
+    //이체, 출금, 송금을 위해서 계좌를 검색하여 반환해주는 findAccount 메소드
     public Account findAccount(String accNo){
-        //TODO: 계좌리스트에서 찾아서 반환하는 메서드 구현
+        //centralBank 객체 호출
+        CentralBank centralBank = CentralBank.getInstance();
+        //centralBank객체 안에 있는 List를 호출한다
+        List<Account> accountList = centralBank.getAccountList();
 
-        return account;
+        //accountList list를 순회하면서, accNo와 일치하는 account객체가 있다면 반환한다.
+        for(Account account : accountList) {
+            if(account.getAccNo().equals(accNo)) {
+                return account;
+            }
+        }
+        return null;
     }
 
     public void transfer() throws Exception{
