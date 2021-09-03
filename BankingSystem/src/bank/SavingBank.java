@@ -15,10 +15,19 @@ public class SavingBank extends Bank {
     // TODO: 목표금액을 입력받아서 SavingAccount 객체 생성하도록 재정의
     @Override
     public SavingAccount createAccount() throws NoSuchElementException{
-        try{
-            return account;
-        }catch (){
-            //TODO: 오류 throw
+        try {
+            System.out.print("적금계좌명 혹은 적금계좌 소유자의 이름을 입력해주세요: ");
+            String owner = scanner.next();
+            String ano = String.format(new DecimalFormat("0000").format(++seq));
+            System.out.print("목표 금액을 설정해주세요: " );
+            BigDecimal goal = scanner.nextBigDecimal();
+            System.out.printf("\n %s 계좌가 발급되었습니다.\n", owner);
+            //Account 생성자를 호출해서 account라는 객체를 생성했다.
+            SavingAccount account = new SavingAccount(ano, owner, new BigDecimal("0"), goal);
+            return account ;
+        }catch (Exception e){
+            System.out.println("계좌를 발생하는 과정에서 오류가 발생하였습니다.");
+            return null;
         }
     }
 }
