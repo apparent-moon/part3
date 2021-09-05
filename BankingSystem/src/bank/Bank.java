@@ -30,22 +30,21 @@ public class Bank {
             // 계좌번호 입력
             System.out.println("\n출금하실 계좌의 계좌번호를 입력하세요: ");
             String accountNum = scanner.next();
-            if (findAccount(accountNum) != null) {
+            if (findAccount(accountNum) == null) {
+                System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
+                withdraw();
+            } else {
                 // 계좌를 찾아서 account 변수에 집어넣음
                 account = findAccount(accountNum);
 
                 // 만약 적금계좌 타입의 계좌가 입력되었다면 SavingBank.java의 메소드를 실행한다.
-                //Q. 질문 여기서 this가 가리키는게 account가 맞는지??? 왜 this밖에 안되는건지 이해가 안감!
+                // Q. 질문 여기서 this가 가리키는게 account가 맞는지??? 왜 this밖에 안되는건지 이해가 안간다.
                 if (account.getCategory().equals("S")) {
                     SavingBank bank = (SavingBank) this;
                     bank.withdraw((SavingAccount) account); // == ((SavingBank) this).withdraw((SavingAccount) account);
                     return;
-                }
-                break;
-            } else {
-                System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
-                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
-                withdraw();
+                }break;
             }
         }
 
@@ -65,7 +64,7 @@ public class Bank {
                 System.out.println("=====================================================");
             } else {
                 BigDecimal interest = interestCalculators.get("N").getInterest(accountBalance);
-                System.out.println("현재 " + account.getAccNo() + " 계좌에 지급되어있는 이자는 " + df.format(interest) + "원 입니다.");
+                System.out.println("현재 " + account.getAccNo() + " 계좌에 지급된 이자는 " + df.format(interest) + "원 입니다.");
                 account.setBalance(account.getBalance().add(interest));
                 System.out.printf(output + "원 출금이 완료되었습니다.\n");
                 account.setBalance(account.getBalance().subtract(output));
@@ -86,8 +85,11 @@ public class Bank {
             // 계좌번호 입력
             System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
             String accountNum = scanner.next();
-
-            if (findAccount(accountNum) != null) {
+            if (findAccount(accountNum) == null) {
+                System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
+                deposit();
+            } else {
                 // 계좌를 찾아서 account 변수에 집어넣음
                 account = findAccount(accountNum);
                 if (account.getCategory().equals("S")) {
@@ -96,10 +98,6 @@ public class Bank {
                     return;
                 }
                 break;
-            } else {
-                System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
-                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
-                deposit();
             }
         }
         try {

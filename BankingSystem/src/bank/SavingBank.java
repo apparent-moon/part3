@@ -28,7 +28,7 @@ public class SavingBank extends Bank {
                 System.out.println("=====================================================");
             } else {
                 BigDecimal interest = interestCalculators.get("S").getInterest(accountBalance);
-                System.out.println("현재 " + account.getAccNo() + " 계좌에 지급되어있는 이자는 " + df.format(interest) + "원 입니다.");
+                System.out.println("현재 " + account.getAccNo() + " 계좌에 지급된 이자는 " + df.format(interest) + "원 입니다.");
                 account.setBalance(account.getBalance().add(interest));
                 System.out.printf(output + "원 출금이 완료되었습니다.\n");
                 account.setBalance(account.getBalance().subtract(output));
