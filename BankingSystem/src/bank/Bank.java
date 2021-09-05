@@ -40,35 +40,39 @@ public class Bank {
     }
 
     //입금 메소드 deposit.
-    public void deposit(){
+    public void deposit() {
         System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
         String accountNum = scanner.next();
-        if(findAccount(accountNum) != null) {
+        if (findAccount(accountNum) != null) {
             Account account = findAccount(accountNum);
             System.out.print("입금하실 금액을 입력해주세요 : ");
             BigDecimal input = scanner.nextBigDecimal();
-            System.out.println("입금이 완료되었습니다.");
-            account.setBalance(input);
-            System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(), account.getAccNo(), account.getOwner(), account.getBalance());
-        }else {
+            System.out.println("입금이 완료되었습니다.\n");
+            System.out.println("=====================================================");
+            account.setBalance(account.getBalance().add(input));
+            System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(), account.getAccNo(),
+                    account.getOwner(), df.format(account.getBalance()));
+            System.out.println("=====================================================");
+        } else {
             System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
-            //재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
+            // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
             deposit();
         }
     }
 
-    //계좌를 생성하는 createAccount() 메소드
-    public Account createAccount() throws InputMismatchException{
+    // 계좌를 생성하는 createAccount 메소드.
+    public Account createAccount() throws InputMismatchException {
         try {
-            System.out.println("생성할 계좌의 소유주명을 입력해주세요: ");
+            System.out.print("예금계좌명 혹은 예금계좌 소유자의 이름을 입력해주세요: ");
             String owner = scanner.next();
             String ano = String.format(new DecimalFormat("0000").format(++seq));
-            System.out.printf("\n%s님의 계좌가 발급되었습니다.\n", owner);
-            //Account 생성자를 호출해서 account라는 객체를 생성했다. 계좌의 초기금액은 0원이므로 0으로 선언했다.
+            System.out.printf("%s 계좌가 발급되었습니다.\n", owner);
+            System.out.println("=====================================================");
+            // Account 생성자를 호출해서 account라는 객체를 생성했다. 계좌의 초기금액은 0원이므로 0으로 선언했다.
             Account account = new Account(ano, owner, new BigDecimal("0"));
-            return account ;
-        }catch (Exception e){
-            System.out.println("계좌를 생성하는 과정에서 오류가 발생하였습니다.");
+            return account;
+        } catch (Exception e) {
+            System.out.println("계좌를 발생하는 과정에서 오류가 발생하였습니다.");
             return null;
         }
     }

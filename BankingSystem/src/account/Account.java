@@ -1,8 +1,9 @@
 package account;
 
-//import bank.Bank;
+import bank.Bank;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 public class Account {
     private String category;            // String 계좌 종류
@@ -10,6 +11,7 @@ public class Account {
     private String owner;               // String 소유자
     private BigDecimal balance;         // BigDecimal 잔액
     private boolean isActive;           // boolean 활성화 여부
+    public static DecimalFormat df = new DecimalFormat("#,###");
 
     //생성자
     public Account() {
@@ -72,7 +74,7 @@ public class Account {
 
     //return값이 void인 메소드. 계좌의 기본 정보를 return 해준다. 파라미터로 Account객체의 account를 호출한다.
     public void getAccountInfo(Account account){
-        System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원\n", account.category, account.accNo, account.owner, account.balance);
+        System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원\n", account.category, account.accNo, account.owner, df.format(account.balance));
     }
 
     //BigDecimal 타입의 withdraw(출금) 메소드. 매개변수로 BigDecimal타입인 amount라는 이름의 변수를 파라미터로 받는다.
