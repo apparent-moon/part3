@@ -10,12 +10,11 @@ import java.util.InputMismatchException;
 import java.util.*;
 
 public class Bank {
-    //TODO: Bank 클래스는 출금, 입금, 송금, 계좌 생성, 계좌 검색 기능들을 갖고 있습니다.
+    // TODO: Bank 클래스는 출금, 입금, 송금, 계좌 생성, 계좌 검색 기능들을 갖고 있습니다.
     protected static Scanner scanner = new Scanner(System.in);
     protected static int seq = 0;
     public static DecimalFormat df = new DecimalFormat("#,###");
 
-    // 뱅킹 시스템의 기능들
     // 출금 메소드 withdraw.
     public void withdraw() throws Exception {
 
@@ -24,6 +23,7 @@ public class Bank {
         // value: category의 InterestCalculator 인스턴스
         HashMap<String, InterestCalculator> interestCalculators = new HashMap<>();
         interestCalculators.put("N", new BasicInterestCalculator());
+        interestCalculators.put("S", new SavingInterestCalculator());
 
         Account account;
         while (true) {
@@ -44,7 +44,8 @@ public class Bank {
                     SavingBank bank = (SavingBank) this;
                     bank.withdraw((SavingAccount) account); // == ((SavingBank) this).withdraw((SavingAccount) account);
                     return;
-                }break;
+                }
+                break;
             }
         }
 
@@ -55,7 +56,7 @@ public class Bank {
             System.out.printf("출금하실 금액을 입력해주세요 (잔액:%s원): \n", df.format(accountBalance));
             BigDecimal output = scanner.nextBigDecimal();
 
-            // 만약 잔액이 출금액보다 작은 경우
+            // 만약 출금 하려는 금액이 잔액보다 클 경우
             if (accountBalance.compareTo(output) == -1) {
                 System.out.println("해당 금액은 출금할 수 없는 금액입니다. 처음 화면으로 돌아갑니다.\n");
                 System.out.println("=====================================================");
@@ -69,7 +70,8 @@ public class Bank {
                 System.out.printf(output + "원 출금이 완료되었습니다.\n");
                 account.setBalance(account.getBalance().subtract(output));
                 System.out.println("=====================================================");
-                System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(), account.getAccNo(), account.getOwner(), df.format(account.getBalance()));
+                System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(),
+                        account.getAccNo(), account.getOwner(), df.format(account.getBalance()));
                 System.out.println("=====================================================");
             }
         } catch (Exception e) {
@@ -131,35 +133,78 @@ public class Bank {
         }
     }
 
-    //이체, 출금, 송금을 위해서 계좌를 검색하여 반환해주는 findAccount 메소드
-    public Account findAccount(String accNo){
-        //centralBank 객체 호출
+    // 이체, 출금, 송금을 위해서 계좌를 검색하여 반환해주는 findAccount 메소드
+    public Account findAccount(String accNo) {
+        // centralBank 객체 호출
         CentralBank centralBank = CentralBank.getInstance();
-        //centralBank객체 안에 있는 List를 호출한다
+        // centralBank객체 안에 있는 List를 호출한다
         List<Account> accountList = centralBank.getAccountList();
 
-        //accountList list를 순회하면서, accNo와 일치하는 account객체가 있다면 반환한다.
-        for(Account account : accountList) {
-            if(account.getAccNo().equals(accNo)) {
+        // accountList list를 순회하면서, accNo와 일치하는 account객체가 있다면 반환한다.
+        for (Account account : accountList) {
+            if (account.getAccNo().equals(accNo)) {
                 return account;
             }
         }
         return null;
     }
 
-    public void transfer() throws Exception{
-        //TODO: 송금 메서드 구현
-        // 잘못 입력하거나 예외처리시 다시 입력가능하도록
-        //TODO
-        System.out.println("\n송금하시려는 계좌번호를 입력해주세요.");
-        //TODO
-        System.out.println("\n어느 계좌번호로 보내시려나요?");
-        //TODO
-        System.out.println("\n본인 계좌로의 송금은 입금을 이용해주세요.");
-        //TODO
-        System.out.println("\n적금 계좌로는 송금이 불가합니다.");
-        //TODO
-        System.out.println("\n송금할 금액을 입력하세요.");
-        //TODO
+    // 송금기능을 하는 transfer 메소드
+    public void transfer() throws Exception {
+
+        Account sendAccount;
+        Account receiveAccount;
+
+        try {
+            while (true) {
+                System.out.print("\n송금하시려는 계좌번호를 입력해주세요: ");
+                String sendAccountNumber = scanner.next();
+                sendAccount = findAccount(sendAccountNumber);
+
+                // 계좌번호가 null값이 아닐 경우
+                if (findAccount(sendAccountNumber) != null) {
+                    // 만약 유효한 계좌번호인데 적금계좌인경우
+                    if (sendAccount.getCategory().equals("S")) {
+                        System.out.println("적금계좌는 송금이 불가능합니다. 계좌번호를 다시 입력해주세요.");
+                    }break;
+                }else {
+                    System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+                }
+            }
+
+            while (true) {
+                System.out.println("이체 받을 계좌의 계좌번호를 입력해주세요: ");
+                String receiveAccountNumber = scanner.next();
+                receiveAccount = findAccount(receiveAccountNumber);
+
+                // 계좌번호가 null값이 아닐 경우
+                if (findAccount(receiveAccountNumber) != null) {
+                    if (sendAccount.getCategory().equals("S")) {
+                        System.out.println("적금계좌는 송금이 불가능합니다. 계좌번호를 다시 입력해주세요.");
+                        // 이체받는계좌와 송금하는 계좌의 번호가 같을경우
+                    } else if (sendAccount.getAccNo().equals(receiveAccountNumber)) {
+                        System.out.println("\n본인 계좌로의 이체는 입금을 이용해주세요.");
+                        continue;
+                    }break;
+                } else {
+                    System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+                }
+            }
+
+            System.out.println("\n송금할 금액을 입력하세요.");
+            String sendMoney = scanner.next();
+            BigDecimal transferMoney = new BigDecimal(sendMoney);
+            sendAccount.withdraw(transferMoney);
+            receiveAccount.deposit(transferMoney);
+
+            System.out.println("이체가 완료되었습니다. 남은 금액을 확인해주세요.");
+            System.out.println("=====================================================");
+            System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", sendAccount.getCategory(), sendAccount.getAccNo(), sendAccount.getOwner(), df.format(sendAccount.getBalance()));
+            System.out.println("=====================================================");
+
+        } catch (Exception e) {
+            System.out.println("송금 과정에서 오류가 발생하였습니다. 처음으로 돌아갑니다");
+            transfer();
         }
     }
+}
