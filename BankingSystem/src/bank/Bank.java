@@ -55,8 +55,8 @@ public class Bank {
             System.out.printf("출금하실 금액을 입력해주세요 (잔액:%s원): \n", df.format(accountBalance));
             BigDecimal output = scanner.nextBigDecimal();
 
-            // 만약 출금 하려는 금액이 잔액보다 클 경우
-            if (accountBalance.compareTo(output) < 0) {
+            // 만약 잔액이 출금액보다 작은 경우
+            if (accountBalance.compareTo(output) == -1) {
                 System.out.println("해당 금액은 출금할 수 없는 금액입니다. 처음 화면으로 돌아갑니다.\n");
                 System.out.println("=====================================================");
                 System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원\n", account.getCategory(),
