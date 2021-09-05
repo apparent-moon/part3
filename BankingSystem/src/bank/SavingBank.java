@@ -15,7 +15,7 @@ public class SavingBank extends Bank {
         try {
             BigDecimal accountBalance = account.getBalance();
             BigDecimal accountGoalAmount = account.getGoalAmount();
-            
+
             // output 변수로 출금 할 금액을 입력받는다.
             System.out.printf("출금하실 금액을 입력해주세요 (잔액:%s원): \n", df.format(accountBalance));
             BigDecimal output = scanner.nextBigDecimal();

@@ -85,20 +85,18 @@ public class Bank {
             // 계좌번호 입력
             System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
             String accountNum = scanner.next();
+
             if (findAccount(accountNum) == null) {
                 System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
-                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
-                deposit();
-            } else {
-                // 계좌를 찾아서 account 변수에 집어넣음
+                continue;
+            }else {
                 account = findAccount(accountNum);
                 if (account.getCategory().equals("S")) {
                     SavingBank bank = (SavingBank) this;
                     bank.deposit((SavingAccount) account); // == ((SavingBank) this).withdraw((SavingAccount) account);
                     return;
                 }
-                break;
-            }
+            }break;
         }
         try {
             System.out.print("입금하실 금액을 입력해주세요 : ");
