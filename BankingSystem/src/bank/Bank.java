@@ -39,12 +39,30 @@ public class Bank {
         }
     }
 
-    //입금 메소드 deposit.
-    public void deposit() {
-        System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
-        String accountNum = scanner.next();
-        if (findAccount(accountNum) != null) {
-            Account account = findAccount(accountNum);
+    // 입금 메소드 deposit.
+    public void deposit() throws Exception {
+        Account account;
+        while (true) {
+            // 계좌번호 입력
+            System.out.print("\n입금하실 계좌의 계좌번호를 입력해주세요 : ");
+            String accountNum = scanner.next();
+
+            if (findAccount(accountNum) != null) {
+                // 계좌를 찾아서 account 변수에 집어넣음
+                account = findAccount(accountNum);
+                if (account.getCategory().equals("S")) {
+                    SavingBank bank = (SavingBank) this;
+                    bank.deposit((SavingAccount) account); // == ((SavingBank) this).withdraw((SavingAccount) account);
+                    return;
+                }
+                break;
+            } else {
+                System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
+                // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
+                deposit();
+            }
+        }
+        try {
             System.out.print("입금하실 금액을 입력해주세요 : ");
             BigDecimal input = scanner.nextBigDecimal();
             System.out.println("입금이 완료되었습니다.\n");
@@ -53,11 +71,11 @@ public class Bank {
             System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 \n", account.getCategory(), account.getAccNo(),
                     account.getOwner(), df.format(account.getBalance()));
             System.out.println("=====================================================");
-        } else {
-            System.out.println("존재하지 않는 계좌번호입니다. 계좌번호를 다시 입력해주세요.");
-            // 재귀호출을 통해서 올바른 값이 들어올때까지 해당 과정을 진행한다.
-            deposit();
+        } catch (Exception e) {
+            System.out.println("입금하는 과정에서 오류가 발생하였습니다.");
+            return;
         }
+
     }
 
     // 계좌를 생성하는 createAccount 메소드.
@@ -72,7 +90,7 @@ public class Bank {
             Account account = new Account(ano, owner, new BigDecimal("0"));
             return account;
         } catch (Exception e) {
-            System.out.println("계좌를 발생하는 과정에서 오류가 발생하였습니다.");
+            System.out.println("계좌를 생성하는 과정에서 오류가 발생하였습니다.");
             return null;
         }
     }

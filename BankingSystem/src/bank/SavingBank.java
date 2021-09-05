@@ -12,6 +12,24 @@ public class SavingBank extends Bank {
         // TODO: Account의 출금 메서드에서 잔액/목표 금액 체크하여 조금 다르게 구현
         // throws Exception 적금 계좌는 잔액이 목표 금액(%s원) 이상이어야 출금 가능합니다.
     }
+
+    public void deposit(SavingAccount account) throws Exception {
+        try {
+            System.out.print("입금하실 금액을 입력해주세요 : ");
+            BigDecimal input = scanner.nextBigDecimal();
+            System.out.println("입금이 완료되었습니다.\n");
+            System.out.println("========================================================================");
+            account.setBalance(account.getBalance().add(input));
+            System.out.printf("계좌종류: %s | 계좌번호: %s | 계좌주명: %s | 잔액: %s원 | 목표금액 : %s원\n", account.getCategory(),
+                    account.getAccNo(), account.getOwner(), df.format(account.getBalance()),
+                    df.format(account.getGoalAmount()));
+            System.out.println("========================================================================");
+        } catch (Exception e) {
+            System.out.println("입금하는 과정에서 오류가 발생하였습니다.");
+            return;
+        }
+    }
+
     // TODO: 목표금액을 입력받아서 SavingAccount 객체 생성하도록 재정의
     @Override
     public SavingAccount createAccount() throws NoSuchElementException{
@@ -26,7 +44,7 @@ public class SavingBank extends Bank {
             SavingAccount account = new SavingAccount(ano, owner, new BigDecimal("0"), goal);
             return account ;
         }catch (Exception e){
-            System.out.println("계좌를 발생하는 과정에서 오류가 발생하였습니다.");
+            System.out.println("계좌를 생성하는 과정에서 오류가 발생하였습니다.");
             return null;
         }
     }
